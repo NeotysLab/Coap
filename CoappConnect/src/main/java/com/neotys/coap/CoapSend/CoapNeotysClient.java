@@ -1,5 +1,6 @@
 package com.neotys.coap.CoapSend;
 
+import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.eclipse.californium.core.CoapClient;
@@ -47,21 +48,21 @@ public class CoapNeotysClient extends CoapClient {
 
 	private  static final String OBSERVE="OBSERVE";
 
-	public CoapNeotysClient(String uRl, String accept, String method, String formatOfpayLoad, String payload, boolean async,LinkedBlockingQueue<CoapResponse> queue) {
+	public CoapNeotysClient(String uRl, Optional<String> accept, String method, Optional<String> formatOfpayLoad, String payload, boolean async,LinkedBlockingQueue<CoapResponse> queue) {
 		super(uRl);
 		URl = uRl;
-		Accept = getType(accept.toUpperCase());
+		Accept = getType(accept);
 		Method = method;
-		FormatOfpayLoad = getType(formatOfpayLoad.toUpperCase());
+		FormatOfpayLoad = getType(formatOfpayLoad);
 		Payload = payload;
 		asynchronous=async;
 		if(asynchronous)
 			handler=new NeotysCoapHandler(queue);
 	}
-	public CoapNeotysClient(String uRl, String accept, String method,boolean async,LinkedBlockingQueue<CoapResponse> queue) {
+	public CoapNeotysClient(String uRl, Optional<String> accept, String method,boolean async,LinkedBlockingQueue<CoapResponse> queue) {
 		super(uRl);
 		URl = uRl;
-		Accept = getType(accept.toUpperCase());
+		Accept = getType(accept);
 		Method = method;
 		asynchronous=async;
 		if(asynchronous)
@@ -245,53 +246,59 @@ public class CoapNeotysClient extends CoapClient {
 			super.observeAndWait(handler);
 	}
 	
-	 public static int getType(String type) {
-		switch (type) {
-		case TEXT_PLAIN:
-			return MediaTypeRegistry.TEXT_PLAIN;
-		case TEXT_XML:
-			return MediaTypeRegistry.TEXT_XML;
-		case TEXT_CSV:
-			return MediaTypeRegistry.TEXT_CSV;
-		case TEXT_HTML:
-			return MediaTypeRegistry.TEXT_HTML;
-		case APPLICATION_LINK_FORMAT:
-			return MediaTypeRegistry.APPLICATION_LINK_FORMAT;
-		case APPLICATION_XML:
-			return MediaTypeRegistry.APPLICATION_XML;
-		case APPLICATION_RDF_XML:
-			return MediaTypeRegistry.APPLICATION_RDF_XML;
-		case APPLICATION_SOAP_XML:
-			return MediaTypeRegistry.APPLICATION_SOAP_XML;
-		case APPLICATION_ATOM_XML:
-			return MediaTypeRegistry.APPLICATION_ATOM_XML;
-		case APPLICATION_XMPP_XML:
-			return MediaTypeRegistry.APPLICATION_XMPP_XML;
-		case APPLICATION_JSON:
-			return MediaTypeRegistry.APPLICATION_JSON;
-		case IMAGE_GIF:
-			return MediaTypeRegistry.IMAGE_GIF;
-		case IMAGE_JPEG:
-			return MediaTypeRegistry.IMAGE_PNG;
-		case IMAGE_PNG:
-			return MediaTypeRegistry.IMAGE_PNG;
-		case IMAGE_TIFF:
-			return MediaTypeRegistry.IMAGE_TIFF;
-		case AUDIO_RAW:
-			return MediaTypeRegistry.AUDIO_RAW;
-		case VIDEO_RAW:
-			return MediaTypeRegistry.VIDEO_RAW;
-		case APPLICATION_OCTET_STREAM:
-			return MediaTypeRegistry.APPLICATION_OCTET_STREAM;
-		case APPLICATION_EXI:
-			return MediaTypeRegistry.APPLICATION_EXI;
-		case APPLICATION_FASTINFOSET:
-			return MediaTypeRegistry.APPLICATION_FASTINFOSET;
-		case APPLICATION_SOAP_FASTINFOSET:
-			return MediaTypeRegistry.APPLICATION_SOAP_FASTINFOSET;
-		case APPLICATION_X_OBIX_BINARY:
-			return MediaTypeRegistry.APPLICATION_X_OBIX_BINARY;
+	 public static int getType(Optional<String> type)
+	 {
+		if(type.isPresent())
+		{
+			switch (type.get().toUpperCase()) {
+				case TEXT_PLAIN:
+					return MediaTypeRegistry.TEXT_PLAIN;
+				case TEXT_XML:
+					return MediaTypeRegistry.TEXT_XML;
+				case TEXT_CSV:
+					return MediaTypeRegistry.TEXT_CSV;
+				case TEXT_HTML:
+					return MediaTypeRegistry.TEXT_HTML;
+				case APPLICATION_LINK_FORMAT:
+					return MediaTypeRegistry.APPLICATION_LINK_FORMAT;
+				case APPLICATION_XML:
+					return MediaTypeRegistry.APPLICATION_XML;
+				case APPLICATION_RDF_XML:
+					return MediaTypeRegistry.APPLICATION_RDF_XML;
+				case APPLICATION_SOAP_XML:
+					return MediaTypeRegistry.APPLICATION_SOAP_XML;
+				case APPLICATION_ATOM_XML:
+					return MediaTypeRegistry.APPLICATION_ATOM_XML;
+				case APPLICATION_XMPP_XML:
+					return MediaTypeRegistry.APPLICATION_XMPP_XML;
+				case APPLICATION_JSON:
+					return MediaTypeRegistry.APPLICATION_JSON;
+				case IMAGE_GIF:
+					return MediaTypeRegistry.IMAGE_GIF;
+				case IMAGE_JPEG:
+					return MediaTypeRegistry.IMAGE_PNG;
+				case IMAGE_PNG:
+					return MediaTypeRegistry.IMAGE_PNG;
+				case IMAGE_TIFF:
+					return MediaTypeRegistry.IMAGE_TIFF;
+				case AUDIO_RAW:
+					return MediaTypeRegistry.AUDIO_RAW;
+				case VIDEO_RAW:
+					return MediaTypeRegistry.VIDEO_RAW;
+				case APPLICATION_OCTET_STREAM:
+					return MediaTypeRegistry.APPLICATION_OCTET_STREAM;
+				case APPLICATION_EXI:
+					return MediaTypeRegistry.APPLICATION_EXI;
+				case APPLICATION_FASTINFOSET:
+					return MediaTypeRegistry.APPLICATION_FASTINFOSET;
+				case APPLICATION_SOAP_FASTINFOSET:
+					return MediaTypeRegistry.APPLICATION_SOAP_FASTINFOSET;
+				case APPLICATION_X_OBIX_BINARY:
+					return MediaTypeRegistry.APPLICATION_X_OBIX_BINARY;
+			}
+			return -1;
 		}
-		return -1;
-	}
+		else
+			return -1;
+	 }
 }

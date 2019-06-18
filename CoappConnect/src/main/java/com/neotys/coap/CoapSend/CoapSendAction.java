@@ -64,12 +64,12 @@ public final class CoapSendAction implements Action{
 		description.append("CoapSendAction parameters are : .\n");
 		description.append("- CoapURL : Url of the CoapRequest\n");
 		description.append("- Method :method of the coap request : GET, POST, PUT, DELETE,OBSERVE\n");
-		description.append("- Optionnal Payload :Payload for  POST and PUT requests\n");
+		description.append("- Optionnal PayLoad :Payload for  POST and PUT requests\n");
 		description.append("- IsAsynchronous : true of false to define the request is asynchronous\n");
 		description.append("- Optionnal FormatOfPayload : format of the payload : TEXT_PLAIN, TEXT_HTML, TEXT_XML, IMAGE_GIF,IMAGE_JPEG,IMAGE_PNG,VIDEO_RAW,AUDIO_RAW\n");
 		description.append("                                           APPLICATION_LINK_FORMAT, APPLICATION_XML, APPLICATION_OCTET_STREAM, APPLICATION_RDF_XML,APPLICATION_SOAP_XML,APPLICATION_XMPP_XML,APPLICATION_JSON");
 		description.append("- Optionnal Accept : Accept header of the response : TEXT_PLAIN, TEXT_HTML, TEXT_XML, IMAGE_GIF,IMAGE_JPEG,IMAGE_PNG,VIDEO_RAW,AUDIO_RAW\n");
-		description.append("                                           APPLICATION_LINK_FORMAT, APPLICATION_XML, APPLICATION_OCTET_STREAM, APPLICATION_RDF_XML,APPLICATION_SOAP_XML,APPLICATION_XMPP_XML,APPLICATION_JSONt\n");
+		description.append("                                           APPLICATION_LINK_FORMAT, APPLICATION_XML, APPLICATION_OCTET_STREAM, APPLICATION_RDF_XML,APPLICATION_SOAP_XML,APPLICATION_XMPP_XML,APPLICATION_JSON\n");
 		
 		return description.toString();
 	}

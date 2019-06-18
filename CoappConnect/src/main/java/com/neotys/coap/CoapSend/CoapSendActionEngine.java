@@ -1,6 +1,7 @@
 package com.neotys.coap.CoapSend;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.eclipse.californium.core.CoapClient;
@@ -12,6 +13,7 @@ import com.neotys.extensions.action.ActionParameter;
 import com.neotys.extensions.action.engine.ActionEngine;
 import com.neotys.extensions.action.engine.Context;
 import com.neotys.extensions.action.engine.SampleResult;
+import org.eclipse.californium.core.coap.Option;
 
 public final class CoapSendActionEngine implements ActionEngine {
 
@@ -19,9 +21,9 @@ public final class CoapSendActionEngine implements ActionEngine {
 	private  String Method;
 	private  String IsAsynchronousvalue;
 	private  boolean IsAsynchronous=false;
-	private  String PayLoad;
-	private  String Accept;
-	private String FormatOfPayload;
+	private  Optional<String> PayLoad;
+	private Optional<String> Accept;
+	private Optional<String> FormatOfPayload;
 
 	private  static final String GET="GET";
 	private  static final String POST="POST";
@@ -39,7 +41,10 @@ public final class CoapSendActionEngine implements ActionEngine {
 		int IntAccept=-1;
 		int IntPayload=-1;
 		LinkedBlockingQueue<CoapResponse> messagequeue=null;
-		
+
+		FormatOfPayload=Optional.empty();
+		PayLoad= Optional.empty();
+		Accept=Optional.empty();
 		for(ActionParameter parameter:parameters) {
 			switch(parameter.getName()) 
 			{
@@ -54,13 +59,13 @@ public final class CoapSendActionEngine implements ActionEngine {
 				break;
 			
 			case  CoapSendAction.PayLoad:
-				PayLoad = parameter.getValue();
+				PayLoad = Optional.ofNullable(parameter.getValue());
 				break;
 			case  CoapSendAction.FormatOfPayload:
-				FormatOfPayload = parameter.getValue();
+				FormatOfPayload = Optional.ofNullable(parameter.getValue());
 				break;
 			case  CoapSendAction.Accept:
-				Accept = parameter.getValue();
+				Accept = Optional.ofNullable(parameter.getValue());
 				break;
 			
 			}
@@ -81,7 +86,7 @@ public final class CoapSendActionEngine implements ActionEngine {
 			return getErrorResult(context, sampleResult, "Invalid argument: IsAsynchronous cannot be null "
 					+ CoapSendAction.IsAsynchronous + ".", null);
 		}
-		if(IsAsynchronousvalue.toUpperCase().equalsIgnoreCase("TRUE")||IsAsynchronousvalue.toUpperCase().equalsIgnoreCase("FALSE"))
+		if(!IsAsynchronousvalue.toUpperCase().equalsIgnoreCase("TRUE")&&!IsAsynchronousvalue.toUpperCase().equalsIgnoreCase("FALSE"))
 		{
 			return getErrorResult(context, sampleResult, "Invalid argument: IsAsynchronous can only be equal to false or true "
 					+ CoapSendAction.IsAsynchronous + ".", null);
@@ -97,10 +102,10 @@ public final class CoapSendActionEngine implements ActionEngine {
 			}
 			sampleResult.sampleStart();
 			
-			if(!Strings.isNullOrEmpty(FormatOfPayload)&&!Strings.isNullOrEmpty(PayLoad))
+			if(FormatOfPayload.isPresent() && PayLoad.isPresent())
 			{
-				client = new CoapNeotysClient(CoapURL,Accept,Method,FormatOfPayload,PayLoad,IsAsynchronous,messagequeue);
-				if(client.getPayLoadFormat()!=-1)
+				client = new CoapNeotysClient(CoapURL,Accept,Method,FormatOfPayload,PayLoad.get(),IsAsynchronous,messagequeue);
+				if(client.getPayLoadFormat()==-1)
 				{
 					return getErrorResult(context, sampleResult, "Invalid argument: FormatOfPayload unsupported value"
 							+ CoapSendAction.FormatOfPayload + ".", null);
@@ -111,7 +116,7 @@ public final class CoapSendActionEngine implements ActionEngine {
 				client=new CoapNeotysClient(CoapURL, Accept, Method,IsAsynchronous,messagequeue);
 			}
 				
-			if(client.getAccept()!=-1)
+			if(Accept.isPresent() && client.getAccept()==-1)
 			{
 				return getErrorResult(context, sampleResult, "Invalid argument: Accept unsupported value"
 						+ CoapSendAction.Accept + ".", null);
