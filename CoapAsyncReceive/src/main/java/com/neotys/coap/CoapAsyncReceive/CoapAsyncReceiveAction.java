@@ -26,8 +26,8 @@ public final class CoapAsyncReceiveAction implements Action{
 	@Override
 	public List<ActionParameter> getDefaultActionParameters() {
 		final List<ActionParameter> parameters = new ArrayList<ActionParameter>();
-		parameters.add(new ActionParameter(NumberOfMessage,"1 "));
-		parameters.add(new ActionParameter(IntTimeout,"10 "));
+		parameters.add(new ActionParameter(NumberOfMessage,"1"));
+		parameters.add(new ActionParameter(IntTimeout,"10"));
 		
 		// TODO Add default parameters.
 		return parameters;
